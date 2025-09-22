@@ -208,7 +208,15 @@ for i in range(0, len(graph_list), 4):
 st.markdown("---")
 st.subheader("📋 Data Tabel")
 
-st.dataframe(df_filtered, use_container_width=True)
+# Buat copy dan ubah angka ke persen
+df_table = df_filtered.copy()
+for col in df_table.select_dtypes(include="number").columns:
+    if df_table[col].max() <= 1:
+        df_table[col] = (df_table[col] * 100).round(2).astype(str) + "%"
+    else:
+        df_table[col] = df_table[col].round(2).astype(str) + "%"
+
+st.dataframe(df_table, use_container_width=True)
 
 # === Opsi Download ===
 st.markdown("### 💾 Download Data")
@@ -235,6 +243,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
