@@ -73,13 +73,19 @@ st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
 # === Warna konsisten untuk setiap region ===
 region_colors = {
-    "JAKARTA RAYA": "#1f77b4",     # biru
-    "JAVA": "#ff7f0e",             # oranye
-    "KALISUMAPA": "#2ca02c",       # hijau
-    "SUMATERA": "#d62728",         # merah
-    "NATIONAL": "#9467bd",         # ungu
-    "Blended 75 Sites": "#8c564b"  # coklat
+    "JAKARTA RAYA": "#00B0F0",     # 01. Turquoise
+    "JAVA": "#FF3898",             # 02. Pink
+    "KALISUMAPA": "#24D46D",       # 03. Green
+    "SUMATERA": "#FFCC00",         # 04. Gold
+    "NATIONAL": "#262626",         # 05. Abu
+    "Blended 75 Sites": "#FF0080",  # 06. Rose
+    "Blended 75 Sites MW": "#66FF00",  #07. Bright Green    
+    "Blended 75 Sites SP":"#3B00DB", #08. Chrysler Blue
+    "Threshold": "#FF0000" #09. Red
 }
+
+ 
+
 
 # Fungsi normalisasi nama region
 def normalize_region(region_name: str):
@@ -190,3 +196,4 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
+
