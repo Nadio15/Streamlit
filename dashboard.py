@@ -5,7 +5,7 @@ import os
 # === Page Config ===
 st.set_page_config(
     page_title="Dashboard Availability",
-    layout="wide"  # biar full-width
+    layout="wide"
 )
 
 # === Mode Siang/Malam ===
@@ -36,7 +36,7 @@ st.markdown(f"""
     </style>
 """, unsafe_allow_html=True)
 
-# Custom CSS untuk rapikan padding
+# Custom CSS padding
 st.markdown("""
     <style>
         .block-container {
@@ -62,7 +62,7 @@ import matplotlib.ticker as mtick
 # === Load Data ===
 csv_file = "Aggregate.csv"
 if not os.path.exists(csv_file):
-    st.error(f"File {csv_file} tidak ditemukan. Pastikan ada di repo GitHub.")
+    st.error(f"File {csv_file} tidak ditemukan.")
     st.stop()
 
 df = pd.read_csv(csv_file)
@@ -98,7 +98,7 @@ plot_choice = st.sidebar.radio(
 )
 
 if plot_choice.startswith("Plotly") and not PLOTLY_AVAILABLE:
-    st.sidebar.warning("Plotly tidak terdeteksi di environment. Aplikasi akan menggunakan Matplotlib sebagai fallback.")
+    st.sidebar.warning("Plotly tidak tersedia. Pakai Matplotlib sebagai fallback.")
     plot_choice = "Matplotlib (static)"
 
 days_map = {"Last 7 Days": 7, "Last 14 Days": 14,
@@ -122,14 +122,14 @@ region_colors = {
     "75 Blended": "#0000FF"        # Blue
 }
 
-# Fungsi normalisasi nama region
+# Normalisasi nama region
 def normalize_region(region_name: str):
     for key in region_colors.keys():
-        if key in region_name:  # cocokkan substring
+        if key in region_name:
             return key
     return region_name
 
-# === Mapping kolom berdasarkan Teknologi & Program ===
+# Mapping kolom
 columns_map = {
     "2G": {
         "Normal": ["2G JAKARTA RAYA", "2G JAVA", "2G KALISUMAPA", "2G SUMATERA", "2G NATIONAL"],
@@ -145,7 +145,7 @@ columns_map = {
     }
 }
 
-# Grafik list (8)
+# Grafik list
 graph_list = [
     ("2G", "Normal"),
     ("2G", "MW"),
@@ -160,7 +160,7 @@ graph_list = [
 def existing_cols(cols):
     return [c for c in cols if c in df_filtered.columns]
 
-# Tampilkan grid (4 kolom per baris)
+# Tampilkan grid
 for i in range(0, len(graph_list), 4):
     cols = st.columns(4)
     for j, col_container in enumerate(cols):
@@ -190,7 +190,6 @@ for i in range(0, len(graph_list), 4):
             if df_plot["Availability"].dropna().max() <= 1.0:
                 df_plot["Availability"] = df_plot["Availability"] * 100
 
-            # Normalisasi nama region
             df_plot["BaseRegion"] = df_plot["Region"].apply(normalize_region)
 
             if plot_choice.startswith("Plotly") and PLOTLY_AVAILABLE:
@@ -201,27 +200,25 @@ for i in range(0, len(graph_list), 4):
                     color_discrete_map=region_colors
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
+                fig.update_xaxes(tickangle=180)  # rotasi label DATE
                 fig.update_layout(
                     height=280,
                     margin=dict(l=10, r=10, t=40, b=10),
                     legend=dict(
                         orientation="h",
                         yanchor="bottom",
-                        y=1.1,          # posisi legend di atas grafik
+                        y=1.1,
                         xanchor="center",
                         x=0.5,
                         font=dict(size=9)
                     ),
                     legend_title_text=""
                 )
-                # Tambahkan threshold hanya untuk 4G
                 if tech == "4G" and prog in ["Normal", "SP", "MW"]:
                     fig.add_hline(
                         y=99.7,
                         line_dash="dash",
-                        line_color="red",
-                        annotation_text="",
-                        annotation_position="top left"
+                        line_color="red"
                     )
                 st.plotly_chart(fig, use_container_width=True)
 
@@ -235,24 +232,20 @@ for i in range(0, len(graph_list), 4):
                     color = region_colors.get(base_region, None)
                     ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region, color=color)
 
-                # Tambahkan threshold hanya untuk 4G
-                if tech == "4G":
+                if tech == "4G" and prog in ["Normal", "SP", "MW"]:
                     ax.axhline(
                         y=99.7,
                         color="red",
-                        linestyle="--",  # putus-putus
+                        linestyle="--",
                         linewidth=1,
                         label="Threshold 99.7%"
                     )
 
-               ax.set_xlabel("DATE", color=text_color)
-ax.set_ylabel("Availability (%)", color=text_color)
-ax.tick_params(colors=text_color)
-ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-
-# rotasi label sumbu X
-plt.setp(ax.get_xticklabels(), rotation=180, ha="center")
-
+                ax.set_xlabel("DATE", color=text_color)
+                ax.set_ylabel("Availability (%)", color=text_color)
+                ax.tick_params(colors=text_color)
+                ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+                plt.setp(ax.get_xticklabels(), rotation=180, ha="center")
                 ax.legend(
                     fontsize=6,
                     loc='upper center',
@@ -267,7 +260,6 @@ plt.setp(ax.get_xticklabels(), rotation=180, ha="center")
 st.markdown("---")
 st.subheader("📋 Data Tabel")
 
-# Buat copy dan ubah angka ke persen
 df_table = df_filtered.copy()
 for col in df_table.select_dtypes(include="number").columns:
     if df_table[col].max() <= 1:
@@ -280,7 +272,6 @@ st.dataframe(df_table, use_container_width=True)
 # === Opsi Download ===
 st.markdown("### 💾 Download Data")
 
-# Download sebagai CSV
 csv = df_filtered.to_csv(index=False).encode("utf-8")
 st.download_button(
     label="⬇️ Download CSV",
@@ -289,7 +280,6 @@ st.download_button(
     mime="text/csv"
 )
 
-# Download sebagai Excel
 import io
 output = io.BytesIO()
 with pd.ExcelWriter(output, engine="openpyxl") as writer:
@@ -302,7 +292,3 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-
-
-
-
