@@ -62,29 +62,55 @@ columns_map = {
     }
 }
 
-# === Sidebar pilihan ===
-tech_choice = st.sidebar.selectbox("Pilih Technology:", list(columns_map.keys()))
-program_choice = st.sidebar.selectbox("Pilih Program:", list(columns_map[tech_choice].keys()))
+# === List grafik yang mau ditampilkan (8 grafik utama) ===
+graph_list = [
+    ("2G", "Normal"),
+    ("2G", "MW"),
+    ("2G", "SP"),
+    ("2G", "75 Sites"),
+    ("4G", "Normal"),
+    ("4G", "MW"),
+    ("4G", "SP"),
+    ("4G", "75 Sites"),
+]
 
-selected_cols = columns_map[tech_choice][program_choice]
+st.header("📊 Dashboard Availability - 8 Grafik")
 
-# === Grafik ===
-if selected_cols:
-    st.subheader(f"Availability Trend - {tech_choice} ({program_choice})")
-    fig, ax = plt.subplots(figsize=(10, 5))
-    for col in selected_cols:
-        if col in df_filtered.columns:
-            # ambil data
-            y = df_filtered[col]
-            # kalau datanya proporsi (<1), convert ke %
-            if (y.max() <= 1.0):
-                y = y * 100
-            ax.plot(df_filtered['DATE'], y, label=col)
-    ax.legend()
-    ax.set_xlabel("DATE")
-    ax.set_ylabel("Availability (%)")
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-    st.pyplot(fig)
-else:
-    st.warning("Tidak ada kolom untuk ditampilkan pada kombinasi pilihan ini.")
+# === Loop tampilkan dalam grid 2 kolom x 4 baris ===
+for i in range(0, len(graph_list), 2):
+    col1, col2 = st.columns(2)
 
+    # Grafik kiri
+    tech1, prog1 = graph_list[i]
+    with col1:
+        st.subheader(f"{tech1} - {prog1}")
+        fig, ax = plt.subplots(figsize=(6, 3))
+        for col in columns_map[tech1][prog1]:
+            if col in df_filtered.columns:
+                y = df_filtered[col]
+                if y.max() <= 1.0:
+                    y = y * 100
+                ax.plot(df_filtered['DATE'], y, label=col)
+        ax.legend(fontsize=7)
+        ax.set_xlabel("DATE")
+        ax.set_ylabel("Availability (%)")
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+        st.pyplot(fig)
+
+    # Grafik kanan (kalau ada)
+    if i + 1 < len(graph_list):
+        tech2, prog2 = graph_list[i+1]
+        with col2:
+            st.subheader(f"{tech2} - {prog2}")
+            fig, ax = plt.subplots(figsize=(6, 3))
+            for col in columns_map[tech2][prog2]:
+                if col in df_filtered.columns:
+                    y = df_filtered[col]
+                    if y.max() <= 1.0:
+                        y = y * 100
+                    ax.plot(df_filtered['DATE'], y, label=col)
+            ax.legend(fontsize=7)
+            ax.set_xlabel("DATE")
+            ax.set_ylabel("Availability (%)")
+            ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+            st.pyplot(fig)
