@@ -12,15 +12,15 @@ st.set_page_config(
 theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
 
 if theme == "Siang":
-    bg_color = "#000000"
-    text_color = "#FFFFFF"
-    plotly_template = "plotly_white"
-    mpl_facecolor = "#000000"
-else:
-    bg_color = "#FFFFFF"
+    bg_color = "#ffffff"
     text_color = "#000000"
+    plotly_template = "plotly_white"
+    mpl_facecolor = "#ffffff"
+else:
+    bg_color = "#000000"
+    text_color = "#ffffff"
     plotly_template = "plotly_dark"
-    mpl_facecolor = "#FFFFFF"
+    mpl_facecolor = "#000000"
 
 # CSS global
 st.markdown(f"""
@@ -112,14 +112,14 @@ st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
 # === Warna konsisten untuk setiap region ===
 region_colors = {
-    "JAKARTA RAYA": "#0FFFFF",     # Aqua
-    "JAVA": "#DC143C",             # Crimson
-    "KALISUMAPA": "#66FF00",       # Bright Green
-    "SUMATERA": "#FFD700",         # Gold
-    "NATIONAL": "#C0C0C0",         # Silver
-    "Part 75 from MW": "#FF00FF",  # Magenta
-    "Part 75 from SP": "#03C03C",  # Dark Pastel Green
-    "75 Blended": "#0000FF"        # Blue
+    "JAKARTA RAYA": "#0FFFFF",
+    "JAVA": "#DC143C",
+    "KALISUMAPA": "#66FF00",
+    "SUMATERA": "#FFD700",
+    "NATIONAL": "#C0C0C0",
+    "Part 75 from MW": "#FF00FF",
+    "Part 75 from SP": "#03C03C",
+    "75 Blended": "#0000FF"
 }
 
 # Normalisasi nama region
@@ -200,7 +200,7 @@ for i in range(0, len(graph_list), 4):
                     color_discrete_map=region_colors
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
-                fig.update_xaxes(tickangle=90)  # rotasi label DATE
+                fig.update_xaxes(tickangle=90)
                 fig.update_layout(
                     height=280,
                     margin=dict(l=10, r=10, t=40, b=10),
@@ -212,7 +212,9 @@ for i in range(0, len(graph_list), 4):
                         x=0.5,
                         font=dict(size=9)
                     ),
-                    legend_title_text=""
+                    legend_title_text="",
+                    paper_bgcolor="rgba(0,0,0,0)",  # transparan
+                    plot_bgcolor="rgba(0,0,0,0)"    # transparan
                 )
                 if tech == "4G" and prog in ["Normal", "SP", "MW"]:
                     fig.add_hline(
@@ -224,8 +226,8 @@ for i in range(0, len(graph_list), 4):
 
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
-                fig.patch.set_alpha(0)       # background figure transparan
-                ax.set_facecolor("none")     # background axes transparan
+                fig.patch.set_alpha(0)       # figure transparan
+                ax.set_facecolor("none")     # axes transparan
 
                 for region, grp in df_plot.groupby("Region"):
                     base_region = normalize_region(region)
@@ -292,9 +294,3 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-
-
-
-
-
-
