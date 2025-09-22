@@ -81,6 +81,13 @@ region_colors = {
     "Blended 75 Sites": "#8c564b"  # coklat
 }
 
+# Fungsi normalisasi nama region
+def normalize_region(region_name: str):
+    for key in region_colors.keys():
+        if key in region_name:  # cocokkan substring
+            return key
+    return region_name
+
 # === Mapping kolom berdasarkan Teknologi & Program ===
 columns_map = {
     "2G": {
@@ -142,9 +149,12 @@ for i in range(0, len(graph_list), 4):
             if df_plot["Availability"].dropna().max() <= 1.0:
                 df_plot["Availability"] = df_plot["Availability"] * 100
 
+            # Normalisasi nama region
+            df_plot["BaseRegion"] = df_plot["Region"].apply(normalize_region)
+
             if plot_choice.startswith("Plotly") and PLOTLY_AVAILABLE:
                 fig = px.line(
-                    df_plot, x="DATE", y="Availability", color="Region",
+                    df_plot, x="DATE", y="Availability", color="BaseRegion",
                     markers=True, labels={"Availability": "Availability (%)"},
                     template="plotly_white",
                     color_discrete_map=region_colors
@@ -166,11 +176,7 @@ for i in range(0, len(graph_list), 4):
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
                 for region, grp in df_plot.groupby("Region"):
-                    base_region = None
-                    for key in region_colors.keys():
-                        if key in region:   # match substring
-                            base_region = key
-                            break
+                    base_region = normalize_region(region)
                     color = region_colors.get(base_region, None)
                     ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region, color=color)
                 ax.set_xlabel("DATE")
