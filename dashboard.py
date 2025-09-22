@@ -35,7 +35,7 @@ days = days_map[filter_option]
 min_date = max_date - pd.Timedelta(days=days)
 df_filtered = df[df['DATE'] > min_date]
 
-st.title("📊 Dashboard Availability Super 88 & Must Win 50 Kab")
+st.title("📊 Dashboard Availability")
 st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
 # === Mapping kolom berdasarkan Teknologi & Program ===
@@ -87,3 +87,4 @@ if selected_cols:
     st.pyplot(fig)
 else:
     st.warning("Tidak ada kolom untuk ditampilkan pada kombinasi pilihan ini.")
+
