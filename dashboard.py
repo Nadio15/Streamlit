@@ -206,7 +206,7 @@ for i in range(0, len(graph_list), 4):
 
 # === Tabel Data Lengkap ===
 st.markdown("---")
-st.subheader("📋 Tabel Data Lengkap (sesuai filter tanggal)")
+st.subheader("📋 Data Tabel")
 
 st.dataframe(df_filtered, use_container_width=True)
 
@@ -235,6 +235,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
