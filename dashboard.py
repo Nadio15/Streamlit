@@ -67,6 +67,7 @@ if not os.path.exists(csv_file):
 
 df = pd.read_csv(csv_file)
 
+# Rename kolom blended 75
 rename_map = {
     "2G Blended 75 Sites MW": "2G Part 75 from MW",
     "2G Blended 75 Sites SP": "2G Part 75 from SP",
@@ -111,14 +112,14 @@ st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
 # === Warna konsisten untuk setiap region ===
 region_colors = {
-    "JAKARTA RAYA": "#0FFFFF",  #AQUA   
-    "JAVA": "#DC143C", #CRIMSON            
-    "KALISUMAPA": "#66FF00", #BRIGHT GREEN    
-    "SUMATERA": "#FFD700", #GOLD       
-    "NATIONAL": "#C0C0C0",  #SILVER   
-    "Part 75 from MW": "#FF00FF",  #MAGENTA 
-    "Part 75 from SP": "#03C03C", #DARK PASTEL GREEN
-    "75 Blended": "#0000FF" #BLUE
+    "JAKARTA RAYA": "#0FFFFF",     # Aqua
+    "JAVA": "#DC143C",             # Crimson
+    "KALISUMAPA": "#66FF00",       # Bright Green
+    "SUMATERA": "#FFD700",         # Gold
+    "NATIONAL": "#C0C0C0",         # Silver
+    "Part 75 from MW": "#FF00FF",  # Magenta
+    "Part 75 from SP": "#03C03C",  # Dark Pastel Green
+    "75 Blended": "#0000FF"        # Blue
 }
 
 # Fungsi normalisasi nama region
@@ -210,31 +211,50 @@ for i in range(0, len(graph_list), 4):
                         xanchor="center",
                         x=0.5,
                         font=dict(size=9)
-                    )
+                    ),
+                    legend_title_text=""
                 )
+                # Tambahkan threshold hanya untuk 4G
+                if tech == "4G":
+                    fig.add_hline(
+                        y=99.7,
+                        line_dash="dash",
+                        line_color="red",
+                        annotation_text="Threshold 99.7%",
+                        annotation_position="top left"
+                    )
                 st.plotly_chart(fig, use_container_width=True)
+
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
                 fig.patch.set_facecolor(mpl_facecolor)
                 ax.set_facecolor(mpl_facecolor)
-                
+
+                for region, grp in df_plot.groupby("Region"):
+                    base_region = normalize_region(region)
+                    color = region_colors.get(base_region, None)
+                    ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region, color=color)
+
                 # Tambahkan threshold hanya untuk 4G
-if tech == "4G":
-    ax.axhline(
-        y=99.7,
-        color="red",
-        linestyle="--",  # putus-putus
-        linewidth=1,
-        label="Threshold"
-    )
-                ax.set_xlabel("DATE")
-                ax.set_ylabel("Availability (%)")
+                if tech == "4G":
+                    ax.axhline(
+                        y=99.7,
+                        color="red",
+                        linestyle="--",  # putus-putus
+                        linewidth=1,
+                        label="Threshold 99.7%"
+                    )
+
+                ax.set_xlabel("DATE", color=text_color)
+                ax.set_ylabel("Availability (%)", color=text_color)
+                ax.tick_params(colors=text_color)
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
                 ax.legend(
                     fontsize=7,
                     loc='upper center',
                     bbox_to_anchor=(0.5, 1.25),
-                    ncol=2  # legend horizontal
+                    ncol=2,
+                    title=None
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
@@ -278,13 +298,3 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-
-
-
-
-
-
-
-
-
-
