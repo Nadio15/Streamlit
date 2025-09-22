@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mtick
+import plotly.express as px
 import os
 
 # === Load Data ===
@@ -12,14 +11,12 @@ if not os.path.exists(csv_file):
 
 df = pd.read_csv(csv_file)
 
-# Pastikan ada kolom DATE
 if "DATE" not in df.columns:
     st.error("Kolom 'DATE' tidak ada di file CSV.")
     st.stop()
 
 df['DATE'] = pd.to_datetime(df['DATE'], errors='coerce')
 
-# === Ambil max date ===
 max_date = df['DATE'].max()
 
 # Sidebar filter tanggal
@@ -28,7 +25,6 @@ filter_option = st.sidebar.selectbox(
     "Pilih range waktu:",
     ["Last 7 Days", "Last 14 Days", "Last 21 Days", "Last 30 Days"]
 )
-
 days_map = {"Last 7 Days": 7, "Last 14 Days": 14,
             "Last 21 Days": 21, "Last 30 Days": 30}
 days = days_map[filter_option]
@@ -51,18 +47,10 @@ columns_map = {
         "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW"],
         "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP"],
         "75 Sites": ["4G Blended 75 Sites MW", "4G Blended 75 Sites SP", "4G Blended 75 Sites"]
-    },
-    "Blended": {
-        "All": ["2G Blended 75 Sites", "4G Blended 75 Sites"],
-        "MW": ["2G Blended 75 Sites MW", "4G Blended 75 Sites MW"],
-        "SP": ["2G Blended 75 Sites SP", "4G Blended 75 Sites SP"]
-    },
-    "Other": {
-        "Threshold": ["Threshold"]
     }
 }
 
-# === List grafik yang mau ditampilkan (8 grafik utama) ===
+# Grafik yang mau ditampilkan
 graph_list = [
     ("2G", "Normal"),
     ("2G", "MW"),
@@ -74,27 +62,25 @@ graph_list = [
     ("4G", "75 Sites"),
 ]
 
-st.header("📊 Dashboard Availability - 8 Grafik")
-
-# === Loop tampilkan dalam grid 4 kolom x 2 baris ===
+# === Tampilkan 8 grafik dengan 4 kolom per baris ===
 for i in range(0, len(graph_list), 4):
-    cols = st.columns(4)  # bikin 4 kolom
-    
+    cols = st.columns(4)
     for j, col_container in enumerate(cols):
         if i + j < len(graph_list):
             tech, prog = graph_list[i + j]
+            selected_cols = columns_map[tech][prog]
+            df_plot = df_filtered.melt(id_vars="DATE", value_vars=selected_cols,
+                                       var_name="Region", value_name="Availability")
+            # kalau datanya <1, konversi ke %
+            if df_plot["Availability"].max() <= 1.0:
+                df_plot["Availability"] = df_plot["Availability"] * 100
+
             with col_container:
                 st.subheader(f"{tech} - {prog}")
-                fig, ax = plt.subplots(figsize=(5, 3))  # agak kecil biar muat
-                for col in columns_map[tech][prog]:
-                    if col in df_filtered.columns:
-                        y = df_filtered[col]
-                        if y.max() <= 1.0:
-                            y = y * 100
-                        ax.plot(df_filtered['DATE'], y, label=col)
-                ax.legend(fontsize=6)
-                ax.set_xlabel("DATE")
-                ax.set_ylabel("Availability (%)")
-                ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-                st.pyplot(fig)
-
+                fig = px.line(df_plot, x="DATE", y="Availability",
+                              color="Region", markers=True,
+                              labels={"Availability": "Availability (%)"},
+                              template="plotly_white")
+                fig.update_yaxes(ticksuffix="%", showgrid=True)
+                fig.update_layout(height=300, legend=dict(font=dict(size=9)))
+                st.plotly_chart(fig, use_container_width=True)
