@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import os
 
 # === Load Data ===
@@ -86,4 +87,3 @@ if selected_cols:
     st.pyplot(fig)
 else:
     st.warning("Tidak ada kolom untuk ditampilkan pada kombinasi pilihan ini.")
-
