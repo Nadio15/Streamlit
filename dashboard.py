@@ -8,6 +8,37 @@ st.set_page_config(
     layout="wide"  # biar full-width
 )
 
+# === Mode Siang/Malam ===
+theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
+
+if theme == "Siang":
+    st.markdown("""
+        <style>
+            body {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .block-container {
+                background-color: #ffffff;
+                color: #000000;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+        <style>
+            body {
+                background-color: #0e1117;
+                color: #fafafa;
+            }
+            .block-container {
+                background-color: #0e1117;
+                color: #fafafa;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+
 # Custom CSS untuk rapikan padding
 st.markdown("""
     <style>
@@ -243,6 +274,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
