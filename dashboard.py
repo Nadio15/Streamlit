@@ -17,10 +17,10 @@ if theme == "Siang":
     plotly_template = "plotly_white"
     mpl_facecolor = "#ffffff"
 else:
-    bg_color = "#0e1117"
-    text_color = "#fafafa"
+    bg_color = "#000000"
+    text_color = "#ffffff"
     plotly_template = "plotly_dark"
-    mpl_facecolor = "#0e1117"
+    mpl_facecolor = "#000000"
 
 # CSS global
 st.markdown(f"""
@@ -273,6 +273,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
