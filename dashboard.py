@@ -73,10 +73,17 @@ if selected_cols:
     fig, ax = plt.subplots(figsize=(10, 5))
     for col in selected_cols:
         if col in df_filtered.columns:
-            ax.plot(df_filtered['DATE'], df_filtered[col], label=col)
+            # ambil data
+            y = df_filtered[col]
+            # kalau datanya proporsi (<1), convert ke %
+            if (y.max() <= 1.0):
+                y = y * 100
+            ax.plot(df_filtered['DATE'], y, label=col)
     ax.legend()
     ax.set_xlabel("DATE")
     ax.set_ylabel("Availability (%)")
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter())
     st.pyplot(fig)
 else:
     st.warning("Tidak ada kolom untuk ditampilkan pada kombinasi pilihan ini.")
+
