@@ -11,16 +11,11 @@ st.set_page_config(
 # === Mode Siang/Malam ===
 theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
 
-if theme == "Siang":
-    bg_color = "#ffffff"
-    text_color = "#000000"
-    plotly_template = "plotly_white"
-    mpl_facecolor = "#ffffff"
-else:
-    bg_color = "#000000"
-    text_color = "#ffffff"
-    plotly_template = "plotly_dark"
-    mpl_facecolor = "#000000"
+# Warna abu-abu untuk background
+bg_color = "#D3D3D3"
+text_color = "#000000"
+plotly_template = "plotly_white"
+mpl_facecolor = "#D3D3D3"
 
 # CSS global
 st.markdown(f"""
@@ -213,8 +208,8 @@ for i in range(0, len(graph_list), 4):
                         font=dict(size=9)
                     ),
                     legend_title_text="",
-                    paper_bgcolor="rgba(0,0,0,0)",  # transparan
-                    plot_bgcolor="rgba(0,0,0,0)"    # transparan
+                    paper_bgcolor="#D3D3D3",  # abu-abu
+                    plot_bgcolor="#D3D3D3"    # abu-abu
                 )
                 if tech == "4G" and prog in ["Normal", "SP", "MW"]:
                     fig.add_hline(
@@ -226,8 +221,8 @@ for i in range(0, len(graph_list), 4):
 
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
-                fig.patch.set_alpha(0)       # figure transparan
-                ax.set_facecolor("none")     # axes transparan
+                fig.patch.set_facecolor(mpl_facecolor)  # abu-abu
+                ax.set_facecolor(mpl_facecolor)        # abu-abu
 
                 for region, grp in df_plot.groupby("Region"):
                     base_region = normalize_region(region)
@@ -256,7 +251,7 @@ for i in range(0, len(graph_list), 4):
                     title=None
                 )
                 fig.tight_layout()
-                st.pyplot(fig, transparent=True)
+                st.pyplot(fig)
 
 # === Tabel Data Lengkap ===
 st.markdown("---")
