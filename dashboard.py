@@ -8,11 +8,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# === Mode Siang/Malam ===
-theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
-
 # Warna abu-abu untuk background
-bg_color = "#D3D3D3"
+bg_color = "#F5F5F5"
 text_color = "#000000"
 plotly_template = "plotly_white"
 mpl_facecolor = "#D3D3D3"
@@ -289,3 +286,4 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
