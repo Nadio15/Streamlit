@@ -71,6 +71,16 @@ df_filtered = df[df['DATE'] > min_date]
 st.title("📊 Dashboard Availability")
 st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
+# === Warna konsisten untuk setiap region ===
+region_colors = {
+    "JAKARTA RAYA": "#1f77b4",     # biru
+    "JAVA": "#ff7f0e",             # oranye
+    "KALISUMAPA": "#2ca02c",       # hijau
+    "SUMATERA": "#d62728",         # merah
+    "NATIONAL": "#9467bd",         # ungu
+    "Blended 75 Sites": "#8c564b"  # coklat
+}
+
 # === Mapping kolom berdasarkan Teknologi & Program ===
 columns_map = {
     "2G": {
@@ -136,7 +146,8 @@ for i in range(0, len(graph_list), 4):
                 fig = px.line(
                     df_plot, x="DATE", y="Availability", color="Region",
                     markers=True, labels={"Availability": "Availability (%)"},
-                    template="plotly_white"
+                    template="plotly_white",
+                    color_discrete_map=region_colors
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
                 fig.update_layout(
@@ -155,7 +166,13 @@ for i in range(0, len(graph_list), 4):
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
                 for region, grp in df_plot.groupby("Region"):
-                    ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region)
+                    base_region = None
+                    for key in region_colors.keys():
+                        if key in region:   # match substring
+                            base_region = key
+                            break
+                    color = region_colors.get(base_region, None)
+                    ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region, color=color)
                 ax.set_xlabel("DATE")
                 ax.set_ylabel("Availability (%)")
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
