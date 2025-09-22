@@ -204,4 +204,37 @@ for i in range(0, len(graph_list), 4):
                 fig.tight_layout()
                 st.pyplot(fig)
 
+# === Tabel Data Lengkap ===
+st.markdown("---")
+st.subheader("📋 Tabel Data Lengkap (sesuai filter tanggal)")
+
+st.dataframe(df_filtered, use_container_width=True)
+
+# === Opsi Download ===
+st.markdown("### 💾 Download Data")
+
+# Download sebagai CSV
+csv = df_filtered.to_csv(index=False).encode("utf-8")
+st.download_button(
+    label="⬇️ Download CSV",
+    data=csv,
+    file_name="dashboard_filtered.csv",
+    mime="text/csv"
+)
+
+# Download sebagai Excel
+import io
+import openpyxl
+
+output = io.BytesIO()
+with pd.ExcelWriter(output, engine="openpyxl") as writer:
+    df_filtered.to_excel(writer, index=False, sheet_name="FilteredData")
+st.download_button(
+    label="⬇️ Download Excel",
+    data=output.getvalue(),
+    file_name="dashboard_filtered.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
+
 
