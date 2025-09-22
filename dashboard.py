@@ -220,6 +220,7 @@ for i in range(0, len(graph_list), 4):
                         y=99.7,
                         line_dash="dash",
                         line_color="red",
+                        annotation_text="",
                         annotation_position="top left"
                     )
                 st.plotly_chart(fig, use_container_width=True)
@@ -297,4 +298,5 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
