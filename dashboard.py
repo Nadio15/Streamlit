@@ -107,13 +107,13 @@ columns_map = {
         "Normal": ["2G JAKARTA RAYA", "2G JAVA", "2G KALISUMAPA", "2G SUMATERA", "2G NATIONAL"],
         "MW": ["2G JAKARTA RAYA MW", "2G JAVA MW", "2G SUMATERA MW", "2G NATIONAL MW"],
         "SP": ["2G JAKARTA RAYA SP", "2G JAVA SP", "2G KALISUMAPA SP", "2G SUMATERA SP", "2G NATIONAL SP"],
-        "75 Sites": ["2G Blended 75 Sites MW", "2G Blended 75 Sites SP", "2G Blended 75 Sites"]
+        "75 Sites": ["2G Part 75 from MW", "2G Part 75 from SP", "2G 75 Blended"]
     },
     "4G": {
         "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL","Threshold"],
         "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW","Threshold"],
         "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP","Threshold"],
-        "75 Sites": ["4G Blended 75 Sites MW", "4G Blended 75 Sites SP", "4G Blended 75 Sites","Threshold"]
+        "75 Sites": ["4G Part 75 from MW", "4G Part 75 from SP", "4G 75 Blended"]
     }
 }
 
@@ -203,4 +203,5 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
+
 
