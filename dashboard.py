@@ -108,7 +108,7 @@ region_colors = {
     "JAVA": "#DC143C",
     "KALISUMAPA": "#66FF00",
     "SUMATERA": "#FFD700",
-    "NATIONAL": "#FFFFFF",
+    "NATIONAL": "#000000",
     "Part 75 from MW": "#FF00FF",
     "Part 75 from SP": "#03C03C",
     "75 Blended": "#0000FF"
@@ -286,5 +286,6 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
