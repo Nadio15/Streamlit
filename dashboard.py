@@ -141,8 +141,15 @@ for i in range(0, len(graph_list), 4):
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
                 fig.update_layout(
                     height=280,
-                    margin=dict(l=10, r=10, t=30, b=10),
-                    legend=dict(font=dict(size=9))
+                    margin=dict(l=10, r=10, t=40, b=10),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.1,          # posisi legend di atas grafik
+                        xanchor="center",
+                        x=0.5,
+                        font=dict(size=9)
+                    )
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:
@@ -152,6 +159,11 @@ for i in range(0, len(graph_list), 4):
                 ax.set_xlabel("DATE")
                 ax.set_ylabel("Availability (%)")
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-                ax.legend(fontsize=7)
+                ax.legend(
+                    fontsize=7,
+                    loc='upper center',
+                    bbox_to_anchor=(0.5, 1.25),
+                    ncol=2  # legend horizontal
+                )
                 fig.tight_layout()
                 st.pyplot(fig)
