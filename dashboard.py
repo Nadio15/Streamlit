@@ -224,8 +224,8 @@ for i in range(0, len(graph_list), 4):
 
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
-                fig.patch.set_facecolor(mpl_facecolor)
-                ax.set_facecolor(mpl_facecolor)
+                fig.patch.set_alpha(0)       # background figure transparan
+                ax.set_facecolor("none")     # background axes transparan
 
                 for region, grp in df_plot.groupby("Region"):
                     base_region = normalize_region(region)
@@ -254,7 +254,7 @@ for i in range(0, len(graph_list), 4):
                     title=None
                 )
                 fig.tight_layout()
-                st.pyplot(fig)
+                st.pyplot(fig, transparent=True)
 
 # === Tabel Data Lengkap ===
 st.markdown("---")
@@ -292,6 +292,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
