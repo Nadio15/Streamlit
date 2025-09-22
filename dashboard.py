@@ -178,16 +178,18 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
                 fig.update_layout(
-                    height=280,
-                    margin=dict(l=10, r=10, t=40, b=10),
-                    legend=dict(
-                        orientation="h",
-                        yanchor="bottom",
-                        y=1.1,          # posisi legend di atas grafik
-                        xanchor="center",
-                        x=0.5,
-                        font=dict(size=9)
-                    )
+    height=280,
+    margin=dict(l=10, r=10, t=40, b=10),
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.1,
+        xanchor="center",
+        x=0.5,
+        font=dict(size=9)
+    ),
+    legend_title_text=""  # hapus title legend
+)
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:
@@ -207,5 +209,6 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
+
 
 
