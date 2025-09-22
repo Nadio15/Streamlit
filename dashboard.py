@@ -12,32 +12,29 @@ st.set_page_config(
 theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
 
 if theme == "Siang":
-    st.markdown("""
-        <style>
-            body {
-                background-color: #ffffff;
-                color: #000000;
-            }
-            .block-container {
-                background-color: #ffffff;
-                color: #000000;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+    bg_color = "#ffffff"
+    text_color = "#000000"
+    plotly_template = "plotly_white"
+    mpl_facecolor = "#ffffff"
 else:
-    st.markdown("""
-        <style>
-            body {
-                background-color: #0e1117;
-                color: #fafafa;
-            }
-            .block-container {
-                background-color: #0e1117;
-                color: #fafafa;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+    bg_color = "#0e1117"
+    text_color = "#fafafa"
+    plotly_template = "plotly_dark"
+    mpl_facecolor = "#0e1117"
 
+# CSS global
+st.markdown(f"""
+    <style>
+        body {{
+            background-color: {bg_color};
+            color: {text_color};
+        }}
+        .block-container {{
+            background-color: {bg_color};
+            color: {text_color};
+        }}
+    </style>
+""", unsafe_allow_html=True)
 
 # Custom CSS untuk rapikan padding
 st.markdown("""
@@ -200,7 +197,7 @@ for i in range(0, len(graph_list), 4):
                 fig = px.line(
                     df_plot, x="DATE", y="Availability", color="BaseRegion",
                     markers=True, labels={"Availability": "Availability (%)"},
-                    template="plotly_white",
+                    template=plotly_template,
                     color_discrete_map=region_colors
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
@@ -219,6 +216,8 @@ for i in range(0, len(graph_list), 4):
                 st.plotly_chart(fig, use_container_width=True)
             else:
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
+                fig.patch.set_facecolor(mpl_facecolor)
+                ax.set_facecolor(mpl_facecolor)
                 for region, grp in df_plot.groupby("Region"):
                     base_region = normalize_region(region)
                     color = region_colors.get(base_region, None)
@@ -274,6 +273,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
