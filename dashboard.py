@@ -187,7 +187,7 @@ for i in range(0, len(graph_list), 4):
             if plot_choice.startswith("Plotly") and PLOTLY_AVAILABLE:
                 fig = px.line(
                     df_plot, x="DATE", y="Availability", color="BaseRegion",
-                    markers=True, labels={"Availability": "Availability (%)"},
+                    markers=True, labels={"DATE": "", "Availability": "Availability (%)"},
                     template=plotly_template,
                     color_discrete_map=region_colors
                 )
@@ -287,6 +287,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
