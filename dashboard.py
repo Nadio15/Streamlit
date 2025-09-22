@@ -115,8 +115,7 @@ region_colors = {
     "JAVA": "#DC143C", #CRIMSON            
     "KALISUMAPA": "#66FF00", #BRIGHT GREEN    
     "SUMATERA": "#FFD700", #GOLD       
-    "NATIONAL": "#000000",  #BLACK       
-    "Threshold": "#FF0800", #CANDY APPLE RED
+    "NATIONAL": "#C0C0C0",  #SILVER   
     "Part 75 from MW": "#FF00FF",  #MAGENTA 
     "Part 75 from SP": "#03C03C", #DARK PASTEL GREEN
     "75 Blended": "#0000FF" #BLUE
@@ -138,9 +137,9 @@ columns_map = {
         "75 Sites": ["2G Part 75 from MW", "2G Part 75 from SP", "2G 75 Blended"]
     },
     "4G": {
-        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL","Threshold"],
-        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW","Threshold"],
-        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP","Threshold"],
+        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL"],
+        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW"],
+        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP"],
         "75 Sites": ["4G Part 75 from MW", "4G Part 75 from SP", "4G 75 Blended"]
     }
 }
@@ -218,10 +217,16 @@ for i in range(0, len(graph_list), 4):
                 fig, ax = plt.subplots(figsize=(4.5, 2.8))
                 fig.patch.set_facecolor(mpl_facecolor)
                 ax.set_facecolor(mpl_facecolor)
-                for region, grp in df_plot.groupby("Region"):
-                    base_region = normalize_region(region)
-                    color = region_colors.get(base_region, None)
-                    ax.plot(grp["DATE"], grp["Availability"], marker='o', label=region, color=color)
+                
+                # Tambahkan threshold hanya untuk 4G
+if tech == "4G":
+    ax.axhline(
+        y=99.7,
+        color="red",
+        linestyle="--",  # putus-putus
+        linewidth=1,
+        label="Threshold"
+    )
                 ax.set_xlabel("DATE")
                 ax.set_ylabel("Availability (%)")
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
@@ -273,6 +278,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
