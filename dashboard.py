@@ -12,15 +12,15 @@ st.set_page_config(
 theme = st.sidebar.radio("🌓 Pilih Mode Tampilan:", ["Siang", "Malam"])
 
 if theme == "Siang":
-    bg_color = "#C0C0C0"
-    text_color = "#000000"
+    bg_color = "#000000"
+    text_color = "#FFFFFF"
     plotly_template = "plotly_white"
-    mpl_facecolor = "#C0C0C0"
+    mpl_facecolor = "#000000"
 else:
-    bg_color = "#C0C0C0"
-    text_color = "#ffffff"
+    bg_color = "#FFFFFF"
+    text_color = "#000000"
     plotly_template = "plotly_dark"
-    mpl_facecolor = "#C0C0C0"
+    mpl_facecolor = "#FFFFFF"
 
 # CSS global
 st.markdown(f"""
@@ -292,6 +292,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
