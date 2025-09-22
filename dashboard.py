@@ -43,14 +43,6 @@ if "DATE" not in df.columns:
     st.error("Kolom 'DATE' tidak ada di file CSV.")
     st.stop()
 
-# Rename kolom blended 75 sites agar lebih rapih
-rename_map = {
-    "Blended 75 Sites MW": "Part 75 from MW",
-    "Blended 75 Sites SP": "Part 75 from SP",
-    "Blended 75 Sites": "75 Blended"
-}
-df.rename(columns=rename_map, inplace=True)
-
 df['DATE'] = pd.to_datetime(df['DATE'], errors='coerce')
 max_date = df['DATE'].max()
 
@@ -86,9 +78,7 @@ region_colors = {
     "KALISUMAPA": "#2ca02c",       # hijau
     "SUMATERA": "#d62728",         # merah
     "NATIONAL": "#9467bd",         # ungu
-    "75 Blended": "#8c564b",       # coklat
-    "Part 75 from MW": "#e377c2",  # pink
-    "Part 75 from SP": "#7f7f7f"   # abu
+    "Blended 75 Sites": "#8c564b"  # coklat
 }
 
 # Fungsi normalisasi nama region
@@ -104,13 +94,13 @@ columns_map = {
         "Normal": ["2G JAKARTA RAYA", "2G JAVA", "2G KALISUMAPA", "2G SUMATERA", "2G NATIONAL"],
         "MW": ["2G JAKARTA RAYA MW", "2G JAVA MW", "2G SUMATERA MW", "2G NATIONAL MW"],
         "SP": ["2G JAKARTA RAYA SP", "2G JAVA SP", "2G KALISUMAPA SP", "2G SUMATERA SP", "2G NATIONAL SP"],
-        "75 Sites": ["Part 75 from MW", "Part 75 from SP", "75 Blended"]
+        "75 Sites": ["2G Blended 75 Sites MW", "2G Blended 75 Sites SP", "2G Blended 75 Sites"]
     },
     "4G": {
         "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL"],
         "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW"],
         "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP"],
-        "75 Sites": ["Part 75 from MW", "Part 75 from SP", "75 Blended"]
+        "75 Sites": ["4G Blended 75 Sites MW", "4G Blended 75 Sites SP", "4G Blended 75 Sites"]
     }
 }
 
@@ -180,8 +170,7 @@ for i in range(0, len(graph_list), 4):
                         xanchor="center",
                         x=0.5,
                         font=dict(size=9)
-                    ),
-                    legend_title_text=""  # hapus judul legend
+                    )
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:
@@ -197,8 +186,7 @@ for i in range(0, len(graph_list), 4):
                     fontsize=7,
                     loc='upper center',
                     bbox_to_anchor=(0.5, 1.25),
-                    ncol=2,   # legend horizontal
-                    title=None  # hapus title legend
+                    ncol=2  # legend horizontal
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
