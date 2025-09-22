@@ -39,6 +39,17 @@ if not os.path.exists(csv_file):
 
 df = pd.read_csv(csv_file)
 
+# Rename kolom 75 Sites agar lebih rapih
+rename_map = {
+    "2G Blended 75 Sites MW": "2G Part 75 from MW",
+    "2G Blended 75 Sites SP": "2G Part 75 from SP",
+    "2G Blended 75 Sites": "2G 75 Blended",
+    "4G Blended 75 Sites MW": "4G Part 75 from MW",
+    "4G Blended 75 Sites SP": "4G Part 75 from SP",
+    "4G Blended 75 Sites": "4G 75 Blended",
+}
+df.rename(columns=rename_map, inplace=True)
+
 if "DATE" not in df.columns:
     st.error("Kolom 'DATE' tidak ada di file CSV.")
     st.stop()
@@ -78,9 +89,9 @@ region_colors = {
     "KALISUMAPA": "#24D46D",       # 03. Green
     "SUMATERA": "#FFCC00",         # 04. Gold
     "NATIONAL": "#262626",         # 05. Abu
-    "Blended 75 Sites": "#FF0080",  # 06. Rose
-    "Blended 75 Sites MW": "#66FF00",  #07. Bright Green    
-    "Blended 75 Sites SP":"#3B00DB", #08. Chrysler Blue
+    "75 Blended": "#FF0080",  # 06. Rose
+    "Part 75 from MW": "#66FF00",  #07. Bright Green    
+    "Part 75 from SP":"#3B00DB", #08. Chrysler Blue
     "Threshold": "#FF0000" #09. Red
 }
 
@@ -100,13 +111,13 @@ columns_map = {
         "Normal": ["2G JAKARTA RAYA", "2G JAVA", "2G KALISUMAPA", "2G SUMATERA", "2G NATIONAL"],
         "MW": ["2G JAKARTA RAYA MW", "2G JAVA MW", "2G SUMATERA MW", "2G NATIONAL MW"],
         "SP": ["2G JAKARTA RAYA SP", "2G JAVA SP", "2G KALISUMAPA SP", "2G SUMATERA SP", "2G NATIONAL SP"],
-        "75 Sites": ["2G Blended 75 Sites MW", "2G Blended 75 Sites SP", "2G Blended 75 Sites"]
+        "75 Sites": ["2G Part 75 from MW", "2G Part 75 from SP", "2G 75 Blended"]
     },
     "4G": {
-        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL"],
-        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW"],
-        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP"],
-        "75 Sites": ["4G Blended 75 Sites MW", "4G Blended 75 Sites SP", "4G Blended 75 Sites"]
+        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL","Threshold"],
+        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW","Threshold"],
+        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP","Threshold"],
+        "75 Sites": ["4G Part 75 from MW", "4G Part 75 from SP", "4G 75 Blended"]
     }
 }
 
@@ -196,4 +207,5 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
+
 
