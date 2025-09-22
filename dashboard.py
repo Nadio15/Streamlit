@@ -245,7 +245,7 @@ for i in range(0, len(graph_list), 4):
                 ax.set_ylabel("Availability (%)", color=text_color)
                 ax.tick_params(colors=text_color)
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-                plt.setp(ax.get_xticklabels(), rotation=180, ha="center")
+                plt.setp(ax.get_xticklabels(), rotation=90, ha="center")
                 ax.legend(
                     fontsize=6,
                     loc='upper center',
@@ -292,3 +292,4 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
