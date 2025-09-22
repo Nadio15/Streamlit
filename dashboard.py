@@ -76,41 +76,25 @@ graph_list = [
 
 st.header("📊 Dashboard Availability - 8 Grafik")
 
-# === Loop tampilkan dalam grid 2 kolom x 4 baris ===
-for i in range(0, len(graph_list), 2):
-    col1, col2 = st.columns(2)
+# === Loop tampilkan dalam grid 4 kolom x 2 baris ===
+for i in range(0, len(graph_list), 4):
+    cols = st.columns(4)  # bikin 4 kolom
+    
+    for j, col_container in enumerate(cols):
+        if i + j < len(graph_list):
+            tech, prog = graph_list[i + j]
+            with col_container:
+                st.subheader(f"{tech} - {prog}")
+                fig, ax = plt.subplots(figsize=(5, 3))  # agak kecil biar muat
+                for col in columns_map[tech][prog]:
+                    if col in df_filtered.columns:
+                        y = df_filtered[col]
+                        if y.max() <= 1.0:
+                            y = y * 100
+                        ax.plot(df_filtered['DATE'], y, label=col)
+                ax.legend(fontsize=6)
+                ax.set_xlabel("DATE")
+                ax.set_ylabel("Availability (%)")
+                ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+                st.pyplot(fig)
 
-    # Grafik kiri
-    tech1, prog1 = graph_list[i]
-    with col1:
-        st.subheader(f"{tech1} - {prog1}")
-        fig, ax = plt.subplots(figsize=(6, 3))
-        for col in columns_map[tech1][prog1]:
-            if col in df_filtered.columns:
-                y = df_filtered[col]
-                if y.max() <= 1.0:
-                    y = y * 100
-                ax.plot(df_filtered['DATE'], y, label=col)
-        ax.legend(fontsize=7)
-        ax.set_xlabel("DATE")
-        ax.set_ylabel("Availability (%)")
-        ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-        st.pyplot(fig)
-
-    # Grafik kanan (kalau ada)
-    if i + 1 < len(graph_list):
-        tech2, prog2 = graph_list[i+1]
-        with col2:
-            st.subheader(f"{tech2} - {prog2}")
-            fig, ax = plt.subplots(figsize=(6, 3))
-            for col in columns_map[tech2][prog2]:
-                if col in df_filtered.columns:
-                    y = df_filtered[col]
-                    if y.max() <= 1.0:
-                        y = y * 100
-                    ax.plot(df_filtered['DATE'], y, label=col)
-            ax.legend(fontsize=7)
-            ax.set_xlabel("DATE")
-            ax.set_ylabel("Availability (%)")
-            ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-            st.pyplot(fig)
