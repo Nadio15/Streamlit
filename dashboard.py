@@ -235,7 +235,7 @@ for i in range(0, len(graph_list), 4):
                         label="Threshold 99.7%"
                     )
 
-                ax.set_xlabel("DATE", color=text_color)
+                ax.set_xlabel("", color=text_color)
                 ax.set_ylabel("Availability (%)", color=text_color)
                 ax.tick_params(colors=text_color)
                 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
@@ -287,6 +287,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
