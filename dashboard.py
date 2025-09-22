@@ -224,17 +224,18 @@ st.download_button(
 
 # Download sebagai Excel
 import io
-import openpyxl
-
 output = io.BytesIO()
 with pd.ExcelWriter(output, engine="openpyxl") as writer:
     df_filtered.to_excel(writer, index=False, sheet_name="FilteredData")
+output.seek(0)
+
 st.download_button(
     label="⬇️ Download Excel",
-    data=output.getvalue(),
+    data=output,
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
