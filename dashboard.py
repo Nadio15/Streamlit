@@ -200,7 +200,7 @@ for i in range(0, len(graph_list), 4):
                     color_discrete_map=region_colors
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
-                fig.update_xaxes(tickangle=180)  # rotasi label DATE
+                fig.update_xaxes(tickangle=45)  # rotasi label DATE
                 fig.update_layout(
                     height=280,
                     margin=dict(l=10, r=10, t=40, b=10),
@@ -292,4 +292,5 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
