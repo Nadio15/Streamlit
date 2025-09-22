@@ -39,20 +39,17 @@ if not os.path.exists(csv_file):
 
 df = pd.read_csv(csv_file)
 
-# Rename kolom 75 Sites agar lebih rapih
-rename_map = {
-    "2G Blended 75 Sites MW": "2G Part 75 from MW",
-    "2G Blended 75 Sites SP": "2G Part 75 from SP",
-    "2G Blended 75 Sites": "2G 75 Blended",
-    "4G Blended 75 Sites MW": "4G Part 75 from MW",
-    "4G Blended 75 Sites SP": "4G Part 75 from SP",
-    "4G Blended 75 Sites": "4G 75 Blended",
-}
-df.rename(columns=rename_map, inplace=True)
-
 if "DATE" not in df.columns:
     st.error("Kolom 'DATE' tidak ada di file CSV.")
     st.stop()
+
+# Rename kolom blended 75 sites agar lebih rapih
+rename_map = {
+    "Blended 75 Sites MW": "Part 75 from MW",
+    "Blended 75 Sites SP": "Part 75 from SP",
+    "Blended 75 Sites": "75 Blended"
+}
+df.rename(columns=rename_map, inplace=True)
 
 df['DATE'] = pd.to_datetime(df['DATE'], errors='coerce')
 max_date = df['DATE'].max()
@@ -84,19 +81,15 @@ st.write(f"Data terakhir: **{max_date.date()}**, filter: **{filter_option}**")
 
 # === Warna konsisten untuk setiap region ===
 region_colors = {
-    "JAKARTA RAYA": "#00B0F0",     # 01. Turquoise
-    "JAVA": "#FF3898",             # 02. Pink
-    "KALISUMAPA": "#24D46D",       # 03. Green
-    "SUMATERA": "#FFCC00",         # 04. Gold
-    "NATIONAL": "#262626",         # 05. Abu
-    "75 Blended": "#FF0080",  # 06. Rose
-    "Part 75 from MW": "#66FF00",  #07. Bright Green    
-    "Part 75 from SP":"#3B00DB", #08. Chrysler Blue
-    "Threshold": "#FF0000" #09. Red
+    "JAKARTA RAYA": "#1f77b4",     # biru
+    "JAVA": "#ff7f0e",             # oranye
+    "KALISUMAPA": "#2ca02c",       # hijau
+    "SUMATERA": "#d62728",         # merah
+    "NATIONAL": "#9467bd",         # ungu
+    "75 Blended": "#8c564b",       # coklat
+    "Part 75 from MW": "#e377c2",  # pink
+    "Part 75 from SP": "#7f7f7f"   # abu
 }
-
- 
-
 
 # Fungsi normalisasi nama region
 def normalize_region(region_name: str):
@@ -111,13 +104,13 @@ columns_map = {
         "Normal": ["2G JAKARTA RAYA", "2G JAVA", "2G KALISUMAPA", "2G SUMATERA", "2G NATIONAL"],
         "MW": ["2G JAKARTA RAYA MW", "2G JAVA MW", "2G SUMATERA MW", "2G NATIONAL MW"],
         "SP": ["2G JAKARTA RAYA SP", "2G JAVA SP", "2G KALISUMAPA SP", "2G SUMATERA SP", "2G NATIONAL SP"],
-        "75 Sites": ["2G Part 75 from MW", "2G Part 75 from SP", "2G 75 Blended"]
+        "75 Sites": ["Part 75 from MW", "Part 75 from SP", "75 Blended"]
     },
     "4G": {
-        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL","Threshold"],
-        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW","Threshold"],
-        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP","Threshold"],
-        "75 Sites": ["4G Part 75 from MW", "4G Part 75 from SP", "4G 75 Blended"]
+        "Normal": ["4G JAKARTA RAYA", "4G JAVA", "4G KALISUMAPA", "4G SUMATERA", "4G NATIONAL"],
+        "MW": ["4G JAKARTA RAYA MW", "4G JAVA MW", "4G SUMATERA MW", "4G NATIONAL MW"],
+        "SP": ["4G JAKARTA RAYA SP", "4G JAVA SP", "4G KALISUMAPA SP", "4G SUMATERA SP", "4G NATIONAL SP"],
+        "75 Sites": ["Part 75 from MW", "Part 75 from SP", "75 Blended"]
     }
 }
 
@@ -178,18 +171,17 @@ for i in range(0, len(graph_list), 4):
                 )
                 fig.update_yaxes(ticksuffix="%", showgrid=True)
                 fig.update_layout(
-    height=280,
-    margin=dict(l=10, r=10, t=40, b=10),
-    legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.1,
-        xanchor="center",
-        x=0.5,
-        font=dict(size=9)
-    ),
-    legend_title_text=""  # hapus title legend
-)
+                    height=280,
+                    margin=dict(l=10, r=10, t=40, b=10),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.1,          # posisi legend di atas grafik
+                        xanchor="center",
+                        x=0.5,
+                        font=dict(size=9)
+                    ),
+                    legend_title_text=""  # hapus judul legend
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:
@@ -205,10 +197,8 @@ for i in range(0, len(graph_list), 4):
                     fontsize=7,
                     loc='upper center',
                     bbox_to_anchor=(0.5, 1.25),
-                    ncol=2  # legend horizontal
+                    ncol=2,   # legend horizontal
+                    title=None  # hapus title legend
                 )
                 fig.tight_layout()
                 st.pyplot(fig)
-
-
-
