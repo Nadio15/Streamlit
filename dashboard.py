@@ -81,9 +81,6 @@ graph_list = [
     ("4G", "SP"),
     ("4G", "75 Sites"),
 ]
-
-st.header("📊 Dashboard Availability - 8 Grafik (4 kolom × 2 baris)")
-
 # Helper: dapatkan list kolom yang betul2 ada pada df_filtered
 def existing_cols(cols):
     return [c for c in cols if c in df_filtered.columns]
@@ -138,3 +135,4 @@ for i in range(0, len(graph_list), 4):
                 ax.legend(fontsize=7)
                 fig.tight_layout()
                 st.pyplot(fig)
+
