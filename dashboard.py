@@ -84,14 +84,7 @@ filter_option = st.sidebar.selectbox(
     ["Last 7 Days", "Last 14 Days", "Last 21 Days", "Last 30 Days"]
 )
 
-plot_choice = st.sidebar.radio(
-    "Library visualisasi:",
-    ("Plotly (interaktif)", "Matplotlib (static)")
-)
 
-if plot_choice.startswith("Plotly") and not PLOTLY_AVAILABLE:
-    st.sidebar.warning("Plotly tidak tersedia. Pakai Matplotlib sebagai fallback.")
-    plot_choice = "Matplotlib (static)"
 
 days_map = {"Last 7 Days": 7, "Last 14 Days": 14,
             "Last 21 Days": 21, "Last 30 Days": 30}
@@ -287,6 +280,7 @@ st.download_button(
     file_name="dashboard_filtered.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
 
 
 
