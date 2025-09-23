@@ -1,2 +1,2 @@
 # Streamlit
-Learn how to use Streamlit
+Learn how to use Streamlit python
